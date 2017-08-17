@@ -1,6 +1,7 @@
 import collections
 import pandas as pd
 import numpy as np
+import spss, spssdata
 
 def freq(df, var, nomiss = False):
     """ Erzeugt Häufigkeitstabelle ähnlich der in Stata"""
@@ -40,4 +41,21 @@ def freq(df, var, nomiss = False):
 
     return f
 
-# hier ist viel Platz für Funktionen von Elisabeth und Moises
+def load_spssvars(var):
+    """ Folgende Pakete werden für diese Funktion benötigt: spss, spssdata, pandas.    
+    Überträgt ausgewählte Variablen aus einem SPSS Datensatz in einen pandas DataFrame. 
+    Die gewünschten Variablen müssen als strings in einer Liste als Parameter in die Funktion eingegegen werden.
+    Bsp: var = ["var1", "var2", ect.] """
+
+    data = spssdata.Spssdata(var).fetchall()
+        
+    content = []        
+    for i in range(len(data)):
+        content.append(list(data[i]))
+        
+    labels = []
+    for name in var:
+        labels.append(name)        
+    df = pd.DataFrame(content, columns = labels)            
+        
+    return(df)
